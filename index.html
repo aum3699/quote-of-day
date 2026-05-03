@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote of the day</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="quote-box">
+   <h2>Quote of the day</h2>
+   <blockquote>Loading...</blockquote>
+   <span>Loading...</span>
+   <div>
+        <button id="new-quote">New Quote</button>
+        <button id="tweet">Tweet</button>
+   </div>
+   </div>
+   <script>
+    const quoteText = document.querySelector('blockquote');
+    const quoteAuthor = document.querySelector('span');
+    const newQuoteBtn = document.getElementById('new-quote');
+    const tweetBtn = document.getElementById('tweet');
+    const apiUrl = 'https://random-quotes-freeapi.vercel.app/api/random';
+
+    function getQuote() {
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                quoteText.textContent = data.quote;
+                quoteAuthor.textContent = data.author;
+            })
+            .catch(error => {
+                quoteText.textContent = 'Failed to fetch quote';
+                quoteAuthor.textContent = '';
+                console.error('Error:', error);
+            });
+    }
+
+    function tweetQuote() {
+        const text = `"${quoteText.textContent}" - ${quoteAuthor.textContent}`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    newQuoteBtn.addEventListener('click', getQuote);
+    tweetBtn.addEventListener('click', tweetQuote);
+
+    getQuote();
+   </script>
+</body>
+</html>
